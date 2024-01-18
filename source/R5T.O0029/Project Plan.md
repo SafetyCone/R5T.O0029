@@ -1,2 +1,2 @@
 # R5T.O0029
-Project XElement-level operations library.
+Visual Studio project file XElement-level operations library.
