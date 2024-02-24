@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 using R5T.T0132;
@@ -60,9 +61,10 @@ namespace R5T.O0029.O002
                 Instances.ProjectXElementOperations.In_NewPropertyGroupXElementContext(
                     Instances.PropertyGroupXElementOperations.Set_Label_Main,
                     Instances.PropertyGroupXElementOperations.Set_OutputType_Exe,
-                    Instances.PropertyGroupXElementOperations.Set_TargetFramework_Default,
-                    Instances.PropertyGroupXElementOperations.Enable_ImplicitUsings,
-                    Instances.PropertyGroupXElementOperations.Enable_Nullable
+                    Instances.PropertyGroupXElementOperations.Set_TargetFramework_Net8,
+                    //Instances.PropertyGroupXElementOperations.Enable_ImplicitUsings,
+                    //Instances.PropertyGroupXElementOperations.Enable_Nullable
+                    Instances.PropertyGroupXElementOperations.Set_NoWarn_Default
                 ),
                 Instances.ProjectXElementOperations.In_NewPropertyGroupXElementContext(
                     Instances.PropertyGroupXElementOperations.Set_Label_Package,
@@ -73,15 +75,20 @@ namespace R5T.O0029.O002
                     Instances.PropertyGroupXElementOperations.Set_Company_Rivet,
                     Instances.PropertyGroupXElementOperations.Set_Copyright_Rivet,
                     Instances.PropertyGroupXElementOperations.Set_Description(projectDescription),
-                    Instances.PropertyGroupXElementOperations.Set_PackageLicenseExpression_MIT,
-                    Instances.PropertyGroupXElementOperations.Set_PackageRequireLicenseAcceptance,
+                    // Don't provide package license information for console applications (assuming will never be packaged).
+                    //Instances.PropertyGroupXElementOperations.Set_PackageLicenseExpression_MIT,
+                    //Instances.PropertyGroupXElementOperations.Set_PackageRequireLicenseAcceptance,
                     setRepositoryUrl
                 ),
-                Instances.ProjectXElementOperations.In_NewItemGroupXElementContext(
-                    Instances.ItemGroupXElementOperations.Set_Label_ProjectReferences,
-                    Instances.ItemGroupXElementOperations.Add_ProjectReferences(
-                        expectedProjectFilePath,
-                        referenceProjectFilePaths)
+                Instances.ContextOperations.If(
+                    referenceProjectFilePaths.Any(),
+                    Instances.ProjectXElementOperations.In_NewItemGroupXElementContext(
+                        Instances.ItemGroupXElementOperations.Set_Label_ProjectReferences,
+                        Instances.ItemGroupXElementOperations.Add_ProjectReferences(
+                            expectedProjectFilePath,
+                            referenceProjectFilePaths
+                        )
+                    )
                 )
             );
 
